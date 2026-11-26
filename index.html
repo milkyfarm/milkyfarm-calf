@@ -20,10 +20,21 @@
   <style>
     html, body { margin: 0; height: 100%; background: #f2f6f9; }
     iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; }
+    #back { display: none; position: fixed; left: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 2; padding: 9px 16px 9px 12px; border-radius: 999px;
+      background: #1f4a63; color: #fff; font: 800 14px/1 "Hiragino Sans", system-ui, sans-serif; text-decoration: none; box-shadow: 0 6px 16px rgba(27,58,76,.3); }
   </style>
 </head>
 <body>
-  <!-- 子牛カルテ（GAS）の公開URL -->
-  <iframe id="app" src="https://script.google.com/macros/s/AKfycbwBkEq-eb4BktjY-KNIiU4bV5cm-_qYiuE-GDTE8zNL4zTlIxmI7DAbOFDGw5oa8cRW/exec"></iframe>
+  <!-- 2026-11-26 新しい子牛カルテ（分かれ道 → 哺乳ロボ／牛をさがす → 牛の履歴）に切り替え（大誠さんOK）。
+       ?robot=1 ＝ 今までの子牛カルテ（哺乳ロボ）。左下の「子牛カルテ」で分かれ道へもどる。?tag=10桁 ＝ その牛の履歴を開く -->
+  <iframe id="app"></iframe>
+  <a id="back" href="./">‹ 子牛カルテ</a>
+  <script>
+    var NEW = 'https://script.google.com/macros/s/AKfycbxoPAVDqSzCzGTrdED_arRWdcB8jOFBXZlzR1EhpCfwO7gBB-KwE721SRIlOKU6Ik1Z/exec';
+    var ROBOT = 'https://script.google.com/macros/s/AKfycbwBkEq-eb4BktjY-KNIiU4bV5cm-_qYiuE-GDTE8zNL4zTlIxmI7DAbOFDGw5oa8cRW/exec';
+    var q = new URLSearchParams(location.search), tag = (q.get('tag') || '').replace(/\D/g, '').slice(0, 10);
+    if (q.get('robot') === '1') { document.getElementById('app').src = ROBOT; document.getElementById('back').style.display = 'block'; }
+    else document.getElementById('app').src = NEW + (tag.length === 10 ? '?tag=' + tag : '');
+  </script>
 </body>
 </html>
